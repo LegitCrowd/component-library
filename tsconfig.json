@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "jsx": "react",
+      "target": "es2018",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "jsx": "react-jsx",
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
