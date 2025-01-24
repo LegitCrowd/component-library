@@ -30,8 +30,12 @@ export default [
       babel({
         babelHelpers: 'bundled',
         presets: [
-          '@babel/preset-react', 
+          ['@babel/preset-react', { runtime: 'automatic' }], 
           '@babel/preset-typescript'
+        ],
+        plugins: [
+          ['babel-plugin-add-module-exports'],
+          ['babel-plugin-transform-react-remove-prop-types']
         ],
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       }),
@@ -62,8 +66,12 @@ export default [
       babel({
         babelHelpers: 'bundled',
         presets: [
-          '@babel/preset-react', 
+          ['@babel/preset-react', { runtime: 'automatic' }], 
           '@babel/preset-typescript'
+        ],
+        plugins: [
+          ['babel-plugin-add-module-exports'],
+          ['babel-plugin-transform-react-remove-prop-types']
         ],
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       })
