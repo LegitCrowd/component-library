@@ -1,81 +1,60 @@
-import resolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
-import babel from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "@rollup/plugin-typescript";
+import { dts } from "rollup-plugin-dts";
+import terser from "@rollup/plugin-terser";
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import postcss from "rollup-plugin-postcss";
+
+const packageJson = require("./package.json");
+
+const banner = "'use client';\n";
 
 export default [
   {
-    input: 'src/index.ts',
+    input: "src/index.ts",
     output: [
       {
-        file: 'dist/index.js',
-        format: 'cjs',
-        exports: 'named'
+        file: packageJson.main,
+        format: "cjs",
+        sourcemap: true,
+        banner,
       },
       {
-        file: 'dist/index.esm.js',
-        format: 'esm',
-        exports: 'named'
-      }
+        file: packageJson.module,
+        format: "esm",
+        sourcemap: true,
+        banner,
+      },
     ],
     plugins: [
-      resolve({
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      peerDepsExternal(),
+      resolve(),
+      commonjs(),
+      postcss({
+        extract: true,
+        minimize: true,
+        modules: true
       }),
       typescript({
-        tsconfig: './tsconfig.json',
-        declaration: true,
-        declarationDir: 'dist'
+        tsconfig: "./tsconfig.json",
+        declaration: false,
       }),
-      babel({
-        babelHelpers: 'bundled',
-        presets: [
-          ['@babel/preset-react', { runtime: 'automatic' }], 
-          '@babel/preset-typescript'
-        ],
-        plugins: [
-          ['babel-plugin-add-module-exports'],
-          ['babel-plugin-transform-react-remove-prop-types']
-        ],
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      terser({
+        format: {
+          preamble: banner
+        }
       }),
-      commonjs()
     ],
-    external: ['react', 'react-dom', 'react/jsx-runtime']
+    external: ["react", "react-dom"],
   },
   {
-    input: 'src/ComponentA.tsx',
-    output: [
-      {
-        file: 'dist/ComponentA.js',
-        format: 'cjs'
-      },
-      {
-        file: 'dist/ComponentA.esm.js',
-        format: 'esm'
-      }
-    ],
-    plugins: [
-      resolve({
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      }),
-      typescript({
-        tsconfig: './tsconfig.json',
-        declaration: true
-      }),
-      babel({
-        babelHelpers: 'bundled',
-        presets: [
-          ['@babel/preset-react', { runtime: 'automatic' }], 
-          '@babel/preset-typescript'
-        ],
-        plugins: [
-          ['babel-plugin-add-module-exports'],
-          ['babel-plugin-transform-react-remove-prop-types']
-        ],
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      })
-    ],
-    external: ['react', 'react-dom', 'react/jsx-runtime']
-  }
+    input: "src/index.ts",
+    output: [{ 
+      file: "dist/types.d.ts", 
+      format: "es" 
+    }],
+    plugins: [dts()],
+    external: [/\.css$/]
+  },
 ];

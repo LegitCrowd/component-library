@@ -1,2 +1,2 @@
-export { default as ComponentA } from './ComponentA';
-
+export * from "./components";
+export { ComponentA } from "./components/componentA";
