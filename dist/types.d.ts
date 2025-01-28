@@ -6,4 +6,14 @@ interface ComponentAProps {
 }
 declare const ComponentA: React.FC<ComponentAProps>;
 
-export { ComponentA };
+interface TextInputProps {
+    promptText: string;
+    onSubmit: (answer: string) => void;
+    placeholder?: string;
+    theme?: 'light' | 'dark';
+    testIdPrefix?: string;
+}
+
+declare const TextInput: React.FC<TextInputProps>;
+
+export { ComponentA, TextInput };
